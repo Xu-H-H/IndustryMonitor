@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="message" id="message"></div>
+<div>
+    <input type="text" placeholder="输入" id="txt">
+    <input type="button" value="发送" onclick="sendMessage()" >
+    <input type="button" value="关闭" onclick="closeConn()" >
+
+</div>
+<script>
+    var socket = new WebSocket("ws://127.0.0.1:8000/ws/123/");
+    //连接成功后触发下面的函数
+    socket.onopen=function(even){
+        let tag=document.createElement("div");
+        tag.innerText="[连接成功]";
+        document.getElementById("message").appendChild(tag);
+    }
+    //收到服务端消息后触发下面的函数
+    socket.onmessage = function(even){
+        let tag=document.createElement("div");
+        tag.innerText=even.data;
+        document.getElementById("message").appendChild(tag);
+    }
+    function sendMessage(){
+        let tag=document.getElementById("txt");
+        socket.send(tag.value);
+    }
+    function closeConn(){
+        socket.close()
+    }
+</script>
+</body>
+</html>
